@@ -7,6 +7,7 @@ package MainP;
 import com.googlecode.javacv.OpenCVFrameGrabber;
 import com.googlecode.javacv.cpp.opencv_core;
 import com.googlecode.javacv.cpp.opencv_highgui;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -31,6 +32,8 @@ public class CaptureImage_FromWebCam extends javax.swing.JFrame {
     private void initComponents() {
 
         jButton1 = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -41,19 +44,34 @@ public class CaptureImage_FromWebCam extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setText("Enter a Image Name");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(153, 153, 153)
-                .addComponent(jButton1)
-                .addContainerGap(157, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(144, 144, 144)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(153, 153, 153)
+                        .addComponent(jButton1)))
+                .addContainerGap(149, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(140, Short.MAX_VALUE)
+                .addGap(38, 38, 38)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jButton1)
                 .addGap(138, 138, 138))
         );
@@ -62,18 +80,35 @@ public class CaptureImage_FromWebCam extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        //Take Image  from WebCam code
-        OpenCVFrameGrabber graber = new OpenCVFrameGrabber(0); // Default Web cam is 0. if You wanna try externel -> so use grater than 0
-        try {
-            graber.start();
-            opencv_core.IplImage img = graber.grab();
-            if(img != null){
-                opencv_highgui.cvSaveImage("capture.jpeg",img);
+
+        //Get Image Name
+        String ImageName = jTextField1.getText();
+
+//        Validation the ImageName is not Empty
+        if (ImageName.isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "Please Enter a Image Name", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+//            Open Web Cam
+            OpenCVFrameGrabber graber = new OpenCVFrameGrabber(0); // Default Web cam is 0. if You wanna try externel -> so use grater than 0
+            try {
+//                i think this is a thred,
+                graber.start();
+//                capture the Image
+                opencv_core.IplImage img = graber.grab();
+
+                if (img != null) {
+//                    Save the Image 
+                    opencv_highgui.cvSaveImage("C:\\Users\\sanka\\OneDrive\\Documents\\NetBeansProjects\\ComputerVission\\src\\Images\\" + ImageName + ".jpeg", img);
+                    System.out.println("Capture the Image");
+                } else {
+                    System.out.println("Something wrong, Please Try again later");
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -113,5 +148,7 @@ public class CaptureImage_FromWebCam extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }
