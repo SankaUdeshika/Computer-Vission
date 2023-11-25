@@ -4,7 +4,7 @@
  */
 package MainP;
 
-import com.googlecode.javacv.CanvasFrame;
+import com.googlecode.javacv.OpenCVFrameGrabber;
 import com.googlecode.javacv.cpp.opencv_core;
 import com.googlecode.javacv.cpp.opencv_highgui;
 
@@ -12,12 +12,12 @@ import com.googlecode.javacv.cpp.opencv_highgui;
  *
  * @author sanka
  */
-public class OpenImage extends javax.swing.JFrame {
+public class CaptureImage_FromWebCam extends javax.swing.JFrame {
 
     /**
-     * Creates new form OpenImage
+     * Creates new form CaptureImage_FromWebCam
      */
-    public OpenImage() {
+    public CaptureImage_FromWebCam() {
         initComponents();
     }
 
@@ -34,7 +34,7 @@ public class OpenImage extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("Open Image");
+        jButton1.setText("Take Image");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -46,33 +46,34 @@ public class OpenImage extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(156, 156, 156)
+                .addGap(153, 153, 153)
                 .addComponent(jButton1)
-                .addContainerGap(149, Short.MAX_VALUE))
+                .addContainerGap(157, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(129, 129, 129)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(140, Short.MAX_VALUE)
                 .addComponent(jButton1)
-                .addContainerGap(149, Short.MAX_VALUE))
+                .addGap(138, 138, 138))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // Open Image Code Example
-        opencv_core.IplImage image = opencv_highgui.cvLoadImage("C:\\Users\\sanka\\OneDrive\\Documents\\NetBeansProjects\\ComputerVission\\src\\Images\\IMG_20231009_000440.jpg");
-       
-        //create canvas frame named 'Demo'
-        final CanvasFrame canvas = new CanvasFrame("Demo");
-        
-        //Show Image in canvas frame
-        canvas.showImage(image);
-        
-        //This will close canvas frame in exit
-        canvas.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
+        //Take Image  from WebCam code
+        OpenCVFrameGrabber graber = new OpenCVFrameGrabber(0); // Default Web cam is 0. if You wanna try externel -> so use grater than 0
+        try {
+            graber.start();
+            opencv_core.IplImage img = graber.grab();
+            if(img != null){
+                opencv_highgui.cvSaveImage("capture.jpeg",img);
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -92,20 +93,20 @@ public class OpenImage extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(OpenImage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CaptureImage_FromWebCam.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(OpenImage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CaptureImage_FromWebCam.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(OpenImage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CaptureImage_FromWebCam.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(OpenImage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CaptureImage_FromWebCam.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new OpenImage().setVisible(true);
+                new CaptureImage_FromWebCam().setVisible(true);
             }
         });
     }
